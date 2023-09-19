@@ -17,3 +17,18 @@ exports.createPin=async(req,res)=>{
         })
     }
 }
+
+exports.getPin=async(req,res)=>{
+    try {
+        const allPin=await Pin.find();
+        res.status(200).json({
+            "success":true,
+            allPin
+        })
+    } catch (error) {
+        res.status(500).json({
+            "success":false,
+            "message":error
+        })
+    }
+}

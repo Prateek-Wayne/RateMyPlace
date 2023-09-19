@@ -2,6 +2,7 @@ const express=require('express');
 const mongoose=require('mongoose');
 const dotenv=require('dotenv');
 const pinRoute=require('./routes/pin');
+const userRoute=require('./routes/user');
 dotenv.config();
 
 const app=express();
@@ -17,7 +18,8 @@ mongoose
     console.log(err);
 });
 
-app.use('/api/v1',pinRoute);
+app.use('/api/v1/pin/',pinRoute);
+app.use('/api/v1/user/',userRoute);
 app.listen(PORT,()=>{
     console.log("server started at Port",PORT);
 });
