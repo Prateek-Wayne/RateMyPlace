@@ -1,28 +1,26 @@
 import './App.css';
 import Map, { Marker } from 'react-map-gl';
-const Mylongitude = 77.620231;
-const Mylatitude = 13.040392234751348;
+import "mapbox-gl/dist/mapbox-gl.css";
+import PersonPinCircleIcon from '@mui/icons-material/PersonPinCircle';
 function App() {
+  const Mylongitude = 77.620231;
+ const Mylatitude = 13.040392234751348;
   return (
-    <div className="App">
-      {/* <h1>MapBox</h1> */}
-       <Map
+        <Map
       mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
       initialViewState={{
-        latitude: {Mylatitude},
-        longitude: {Mylongitude},
-        zoom: 15,
+        longitude:Mylongitude,
+        latitude: Mylatitude,
+        zoom: 17
       }}
       style={{width: "100vw", height: "100vh"}}
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
-      {/* <Marker longitude={Mylongitude} latitude={Mylongitude} anchor="bottom" >
-      <img src="./pin.png" />
-    </Marker> */}
+      <Marker longitude={Mylongitude} latitude={Mylatitude} anchor="bottom" >
+       <PersonPinCircleIcon style={{color:'blueviolet' ,fontSize:'4rem'}}/>
+      </Marker>
     </Map>
-    </div>
+
   );
 }
-
 export default App;
-// REACT_APP_MAPBOX_TOKEN=pk.eyJ1IjoicHJhdGVlay13YXluZSIsImEiOiJjbG1yNmN0dncwNXkwMmttdm50N3E5OXk4In0.qSJ2M_UOqjAXi2dubu9nrw
