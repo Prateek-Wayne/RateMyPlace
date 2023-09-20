@@ -37,7 +37,9 @@ exports.login=async(req,res)=>{
                 "message":"username OR password is wrong"
             })
         }
-        if(password!==user.password)
+        const isValid=await bcrypt.compare(password,user.password);
+
+        if(!isValid)
         {
             res.status(401).json({
                 "success":false,
