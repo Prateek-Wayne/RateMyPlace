@@ -2,9 +2,10 @@ import './App.css';
 import Map, { Marker, Popup } from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Room } from '@mui/icons-material';
-import { Box, Typography, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, Divider, Rating, Avatar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import LocationRatingDialog from './components/LocationRatingDialog';
+import LocationInfoPopup from './components/LocationInfoPopup';
 
 function App() {
   const Mylongitude = 77.620231;
@@ -15,15 +16,12 @@ function App() {
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   
   //UseStates for Form
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
-  const [rating, setRating] = useState('');
+  
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [zoom, setZoom] = useState(17);
   const handleZoom = (x) => {
     setZoom(x.viewState.zoom);
-    // console.log(zoom);
   };
  
   const handleMarkerClick = (id) => {
@@ -39,32 +37,6 @@ function App() {
     console.log(e.lngLat);
     console.log(longitude, latitude);
   }
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const newPin = {
-      username: currentUsername,
-      title,
-      desc,
-      ratings: rating,
-      latitude,
-      longitude
-    };
-    const addNewPin = async (newPin) => {
-      try {
-        const setPin = await axios.post("pin/createpin", newPin);
-        setMyPins([...myPins, setPin.data.newPin]);
-        console.log("sent Data to server", setPin);
-      }
-      catch (error) {
-        console.log(error);
-      }
-    };
-    addNewPin(newPin);
-    setTurnOn(false);
-    setTitle('');
-    setDesc('');
-    setRating('');
-  };
   useEffect(() => {
     setCurrentUsername("Jetha");
     const getData = async () => {
@@ -115,30 +87,7 @@ function App() {
                   closeOnClick={false}
                   onClose={() => { setCurrentPlaceId(null) }}
                 >
-                  <Box sx={{ width: '250px', border: '1px solid #ccc', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 0 10px rgba(0,0,0,0.15)' }}>
-                    <Box sx={{ padding: '10px', backgroundColor: '#f5f5f5', display: 'flex', alignItems: 'center' }}>
-                      <Avatar alt={pin.username} src="/static/images/avatar/1.jpg" sx={{ marginRight: '10px' }} />
-                      <Box>
-                        <Typography variant='h6' color='textSecondary'>User</Typography>
-                        <Typography variant='body1'>{pin.username}</Typography>
-                      </Box>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ padding: '10px' }}>
-                      <Typography variant='h6' color='textSecondary'>Place</Typography>
-                      <Typography variant='body1'>{pin.title}</Typography>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ padding: '10px', maxHeight: '60px', overflowY: 'auto' }}>
-                      <Typography variant='h6' color='textSecondary'>Description</Typography>
-                      <Typography variant='body2'>{pin.desc}</Typography>
-                    </Box>
-                    <Divider />
-                    <Box sx={{ padding: '10px', backgroundColor: '#f5f5f5' }}>
-                      <Typography variant='h6' color='textSecondary'>Rating</Typography>
-                      <Rating name="read-only" value={pin.ratings} readOnly />
-                    </Box>
-                  </Box>
+                  <LocationInfoPopup pin={pin} />
                 </Popup>
               )
             }
@@ -149,49 +98,7 @@ function App() {
       }
       {
         turnOn && (
-          <Dialog open={turnOn} onClose={() => setTurnOn(false)}>
-            <DialogTitle style={{ backgroundColor: '#f5f5f5', color: '#333' }}>Rate Location</DialogTitle>
-            <DialogContent>
-              <form onSubmit={handleSubmit}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="title"
-                  label="Title"
-                  type="text"
-                  value={title}
-                  onChange={(e) => { setTitle(e.target.value) }}
-                  fullWidth
-                  variant="outlined"
-                />
-                <TextField
-                  margin="dense"
-                  id="desc"
-                  label="Description"
-                  multiline
-                  rows={3}
-                  type="text"
-                  value={desc}
-                  onChange={(e) => { setDesc(e.target.value) }}
-                  fullWidth
-                  variant="outlined"
-                />
-                <Box component="fieldset" mb={1} borderColor="transparent">
-                  <Typography component="legend">Rating</Typography>
-                  <Rating
-                    name="simple-controlled"
-                    value={rating}
-                    size='large'
-                    onChange={(event, newValue) => {
-                      setRating(newValue);
-                    }}
-                  />
-                </Box>
-                <Button type='submit' variant='contained' color='primary' style={{ marginTop: '10px' }}>Rate</Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-
+          <LocationRatingDialog setTurnOn={setTurnOn} setMyPins={setMyPins} currentUsername={currentUsername} longitude={longitude} latitude={latitude} turnOn={turnOn} myPins={myPins}/>
         )
       }
     </Map>
