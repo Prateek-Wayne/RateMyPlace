@@ -1,7 +1,7 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, Rating, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Dialog, DialogContent, DialogTitle, Rating, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react'
-
+import {Room} from '@mui/icons-material'
 const LocationRatingDialog = ({setTurnOn,longitude,latitude ,currentUsername,setMyPins,turnOn,myPins}) => {
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
@@ -34,10 +34,17 @@ const LocationRatingDialog = ({setTurnOn,longitude,latitude ,currentUsername,set
         setRating('');
       };
     return (
-        <div>
+        <div >
             <Dialog open={turnOn} onClose={() => setTurnOn(false)}>
-                <DialogTitle style={{ backgroundColor: '#f5f5f5', color: '#333' }}>Rate Location</DialogTitle>
+                <DialogTitle style={{ backgroundColor: '#f5f5f5', color: '#333' }}>
+                    <Box display='flex' alignItems='center'>
+                    <Typography variant='h6' style={{ marginRight: '10px' }}>Add a Pin</Typography>
+                    <Room fontSize='large' color='primary' />
+                    </Box>
+                </DialogTitle>
+                
                 <DialogContent>
+                <Avatar alt={currentUsername} src="/static/images/avatar/1.jpg" sx={{ marginRight: '10px' }} />
                     <form onSubmit={handleSubmit}>
                         <TextField
                             autoFocus
