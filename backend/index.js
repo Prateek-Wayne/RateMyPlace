@@ -10,7 +10,7 @@ const PORT=5000;
 app.use(express.json());
 
 mongoose
-.connect(process.env.MONGO_URL)
+.connect("mongodb+srv://lordprateekverma:rimFFlND5oxTl9NQ@cluster0.j2bcqvd.mongodb.net/RateMyPlace?retryWrites=true&w=majority")
 .then(()=>{
     console.log("DB connected");
 })
@@ -20,6 +20,11 @@ mongoose
 
 app.use('/api/v1/pin/',pinRoute);
 app.use('/api/v1/user/',userRoute);
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+});
 app.listen(PORT,()=>{
     console.log("server started at Port",PORT);
 });
