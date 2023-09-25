@@ -1,5 +1,6 @@
 const express=require('express');
 const mongoose=require('mongoose');
+const path=require('path')
 const dotenv=require('dotenv');
 const pinRoute=require('./routes/pin');
 const userRoute=require('./routes/user');
@@ -20,11 +21,12 @@ mongoose
 
 app.use('/api/v1/pin/',pinRoute);
 app.use('/api/v1/user/',userRoute);
-app.use(express.static(path.join(__dirname, "../frontend/build")));
+app.use(express.static(path.join("frontend/build")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+  res.sendFile(path.resolve(__dirname, "frontend","build","index.html"));
 });
 app.listen(PORT,()=>{
     console.log("server started at Port",PORT);
+    console.log(path.join(__dirname,'/home'));
 });
